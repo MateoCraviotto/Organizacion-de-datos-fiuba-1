@@ -39,6 +39,7 @@ def preparar_dataset(df):
 def dividir_dataset(df):
     y = df['tiene_alto_valor_adquisitivo'].copy()
     df.drop(columns=['tiene_alto_valor_adquisitivo'],inplace=True)
+    df.reset_index()
     X = df
     
     return X, y

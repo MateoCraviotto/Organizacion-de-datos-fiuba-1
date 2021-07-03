@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.preprocessing import OrdinalEncoder
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.cluster import KMeans
+from sklearn.preprocessing import Normalizer
 
 def definir_barrio(barrio):
     if barrio == "Palermo":
@@ -26,8 +27,20 @@ def definir_nivel_educativo(nivel):
     else:
         return "Jardin"
     
+def feature_engineering(df):
+    df['trabajo'] = np.where(df['categoria_de_trabajo'] == 'sin_trabajo', 'desempleado', df['trabajo'])
+    df.reset_index(drop=True, inplace=True)
+
+    df = df.replace(np.nan, {'categoria_de_trabajo': 'no_responde', 'trabajo': 'no_responde'})
+    df.reset_index(drop=True, inplace=True)
+
+    df = df.replace(np.nan, {'barrio': 'No responde'})
+    df.reset_index(drop=True, inplace=True)
+
+    return df
+    
 def preparar_dataset(df):
-        
+    feature_engineering(df)    
     df['barrio'] = df['barrio'].apply(definir_barrio)
     df['educacion_alcanzada'] = df['educacion_alcanzada'].apply(definir_nivel_educativo)
     df['estado_marital'] = df['estado_marital'].apply(definir_estado_marital)
@@ -44,3 +57,12 @@ def dividir_dataset(df):
     
     return X, y
     
+
+
+
+def normalizar_datos(X_train):
+
+    normalizer =  Normalizer()
+    X_train = normalizer.fit_transform(X_train)
+
+    return X_train

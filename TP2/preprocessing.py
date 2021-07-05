@@ -56,13 +56,13 @@ def dividir_dataset(df):
     X = df
     
     return X, y
-    
 
-
-
-def normalizar_datos(X_train):
-
-    normalizer =  Normalizer()
-    X_train = normalizer.fit_transform(X_train)
-
-    return X_train
+def normalizar_datos(X_train, X_test):
+    columnas_numericas = ['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']
+    for col in columnas_numericas:
+        mean = X_train[col].mean()
+        std = X_train[col].std()
+        X_train[col].apply(lambda x: (x - mean) / std)
+        X_test[col].apply(lambda x: (x - mean) / std)
+        
+    return X_train, X_test

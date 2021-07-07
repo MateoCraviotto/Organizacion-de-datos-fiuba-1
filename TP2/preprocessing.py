@@ -43,10 +43,11 @@ def preparar_dataset(df):
     feature_engineering(df)    
     df['barrio'] = df['barrio'].apply(definir_barrio)
     df['educacion_alcanzada'] = df['educacion_alcanzada'].apply(definir_nivel_educativo)
-    df['estado_marital'] = df['estado_marital'].apply(definir_estado_marital)
+    df['estado_marital'] = df['estado_marital'].apply(definir_estado_marital)  
+    return df
 
-    df_preparado = pd.get_dummies(df, dummy_na=True, drop_first=True)
-    
+def aplicar_one_hot_encoding(df):
+    df_preparado = pd.get_dummies(df, dummy_na=True, drop_first=True)    
     return df_preparado
 
 def dividir_dataset(df):
@@ -66,3 +67,11 @@ def normalizar_datos(X_train, X_test):
         X_test[col].apply(lambda x: (x - mean) / std)
         
     return X_train, X_test
+
+def traer_variables_categoricas(df):
+    df = df[['barrio', 'categoria_de_trabajo', 'educacion_alcanzada', 'estado_marital','genero','religion','rol_familiar_registrado','trabajo']]
+    return df
+
+def traer_variables_discretas(df):
+    df = df[['anios_estudiados', 'edad', 'horas_trabajo_registradas']]
+    return df

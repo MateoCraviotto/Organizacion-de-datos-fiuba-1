@@ -19,9 +19,9 @@ def plot_roc(_fpr, _tpr, x):
     plt.plot(
         _fpr, _tpr, color='darkorange', lw=2, label=f'AUC score: {roc_auc:.2f}'
     )
-    plt.scatter(_fpr, x)
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
     plt.title('Receiver operating characteristic')

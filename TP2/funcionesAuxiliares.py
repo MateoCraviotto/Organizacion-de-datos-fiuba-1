@@ -7,6 +7,10 @@ def traer_df():
     df = pd.read_csv("https://docs.google.com/spreadsheets/d/1-DWTP8uwVS-dZY402-dm0F9ICw_6PNqDGLmH0u8Eqa0/export?format=csv")
     return df
 
+def traer_holdout():
+    df = pd.read_csv("https://docs.google.com/spreadsheets/d/1ObsojtXfzvwicsFieGINPx500oGbUoaVTERTc69pzxE/export?format=csv")
+    return df
+
 def plot_roc(_fpr, _tpr, x):
 
     roc_auc = auc(_fpr, _tpr)

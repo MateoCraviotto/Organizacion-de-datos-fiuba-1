@@ -2,14 +2,14 @@ from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import roc_auc_score
 import matplotlib.pyplot as plt
 import pandas as pd
+from sklearn.metrics import confusion_matrix
+import seaborn as sns
 
-def traer_df():
-    df = pd.read_csv("https://docs.google.com/spreadsheets/d/1-DWTP8uwVS-dZY402-dm0F9ICw_6PNqDGLmH0u8Eqa0/export?format=csv")
-    return df
+def traer_df():    
+    return pd.read_csv("https://docs.google.com/spreadsheets/d/1-DWTP8uwVS-dZY402-dm0F9ICw_6PNqDGLmH0u8Eqa0/export?format=csv")
 
-def traer_holdout():
-    df = pd.read_csv("https://docs.google.com/spreadsheets/d/1ObsojtXfzvwicsFieGINPx500oGbUoaVTERTc69pzxE/export?format=csv")
-    return df
+def traer_holdout():     
+    return pd.read_csv("https://docs.google.com/spreadsheets/d/1ObsojtXfzvwicsFieGINPx500oGbUoaVTERTc69pzxE/export?format=csv")
 
 def plot_roc(_fpr, _tpr, x):
 
@@ -17,10 +17,9 @@ def plot_roc(_fpr, _tpr, x):
 
     plt.figure(figsize=(15, 10))
     plt.plot(
-        _fpr, _tpr, color='darkorange', lw=2, label=f'ROC curve (area = {roc_auc:.2f})'
+        _fpr, _tpr, color='darkorange', lw=2, label=f'AUC score: {roc_auc:.2f}'
     )
     plt.scatter(_fpr, x)
-    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
     plt.xlabel('False Positive Rate')
@@ -33,3 +32,11 @@ def graficar_auc_roc(y_test, y_pred):
     fpr, tpr, thresholds = roc_curve(y_test, y_pred)
     plot_roc(fpr, tpr, thresholds)
     display(roc_auc_score(y_test, y_pred))
+    
+def graficar_matriz_confusion(y_true, y_pred):
+    fig, ax = plt.subplots(dpi=100)
+    sns.heatmap(confusion_matrix(y_true, y_pred), annot=True, ax=ax,fmt="d",square = True,cmap=plt.cm.Blues)
+    ax.set_title("Matriz de confusion")
+    ax.set_xlabel("Predicho")
+    ax.set_ylabel("Real")
+    

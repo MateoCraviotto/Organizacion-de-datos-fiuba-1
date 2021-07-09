@@ -60,13 +60,17 @@ def dividir_dataset(df):
 
 def normalizar_datos(X_train, X_test):
     columnas_numericas = ['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']
+    X_train_norm = X_train.copy()
+    X_test_norm = X_test.copy()
+    
     for col in columnas_numericas:
-        mean = X_train[col].mean()
-        std = X_train[col].std()
-        X_train[col].apply(lambda x: (x - mean) / std)
-        X_test[col].apply(lambda x: (x - mean) / std)
+        mean = X_train_norm[col].mean()
+        std = X_train_norm[col].std()
         
-    return X_train, X_test
+        X_train_norm[col] = (X_train_norm[col] - mean) / std
+        X_test_norm[col] = (X_test_norm[col] - mean) / std
+        
+    return X_train_norm, X_test_norm
 
 def traer_variables_categoricas(df):
     df = df[['barrio', 'categoria_de_trabajo', 'educacion_alcanzada', 'estado_marital','genero','religion','rol_familiar_registrado','trabajo']]

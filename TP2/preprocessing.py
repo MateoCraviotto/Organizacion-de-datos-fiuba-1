@@ -4,6 +4,7 @@ from sklearn.preprocessing import OrdinalEncoder
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import Normalizer
+from sklearn.cluster import KMeans
 
 def definir_barrio(barrio):
     if barrio == "Palermo":
@@ -79,3 +80,29 @@ def traer_variables_categoricas(df):
 def traer_variables_discretas(df):
     df = df[['anios_estudiados', 'edad', 'horas_trabajo_registradas']]
     return df
+
+
+def expandir_dataset(X):
+    X = X.copy()
+    X2 = aplicar_one_hot_encoding(X)
+    
+    X2['clustering_2'] = KMeans(n_clusters = 2).fit_predict(X2)
+    X2['clustering_4'] = KMeans(n_clusters = 4).fit_predict(X2)
+    X2['clustering_6'] = KMeans(n_clusters = 6).fit_predict(X2)
+    
+    
+    return X2
+
+        
+def preparar_holdout(holdout):
+    
+    id = holdout['id'].copy()
+    
+    holdout.drop(columns=['id'],inplace=True)
+    holdout.reset_index()
+    holdout.drop(columns=['representatividad_poblacional'],inplace=True)
+    holdout.reset_index()
+    
+    holdout = preparar_dataset(holdout)
+    
+    return id, holdout

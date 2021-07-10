@@ -40,3 +40,11 @@ def graficar_matriz_confusion(y_true, y_pred):
     ax.set_xlabel("Predicho")
     ax.set_ylabel("Real")
     
+def escribir_predicciones(ids, predicciones, nombre_archivo):
+    
+    with open("predicciones/"+nombre_archivo+".csv", "w") as archivo:
+        
+        archivo.write("id,tiene_alto_valor_adquisitivo\n")       
+        for persona in range(len(ids)):
+            archivo.write(str(ids[persona]) + "," + str(predicciones[persona]) + "\n")
+ 

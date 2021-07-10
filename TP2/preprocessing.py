@@ -6,17 +6,20 @@ from sklearn.cluster import KMeans
 from sklearn.preprocessing import Normalizer
 from sklearn.cluster import KMeans
 
+
 def definir_barrio(barrio):
     if barrio == "Palermo":
         return "Palermo"
     else:
         return "Otro"
+
     
 def definir_estado_marital(estado_marital):
     if estado_marital.startswith('matrimonio'):
         return 'Con matrimonio'
     else:
         return 'Sin matrimonio'
+    
     
 def definir_nivel_educativo(nivel):
     if nivel.startswith("uni"):
@@ -27,6 +30,7 @@ def definir_nivel_educativo(nivel):
         return "Primario"
     else:
         return "Jardin"
+
     
 def feature_engineering(df):
     df['trabajo'] = np.where(df['categoria_de_trabajo'] == 'sin_trabajo', 'desempleado', df['trabajo'])
@@ -39,6 +43,7 @@ def feature_engineering(df):
     df.reset_index(drop=True, inplace=True)
 
     return df
+  
     
 def preparar_dataset(df):
     feature_engineering(df)    
@@ -47,9 +52,11 @@ def preparar_dataset(df):
     df['estado_marital'] = df['estado_marital'].apply(definir_estado_marital)  
     return df
 
+
 def aplicar_one_hot_encoding(df):
     df_preparado = pd.get_dummies(df, dummy_na=True, drop_first=True)    
     return df_preparado
+
 
 def dividir_dataset(df):
     y = df['tiene_alto_valor_adquisitivo'].copy()
@@ -58,6 +65,7 @@ def dividir_dataset(df):
     X = df
     
     return X, y
+
 
 def normalizar_datos(X_train, X_test):
     columnas_numericas = ['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']
@@ -73,9 +81,11 @@ def normalizar_datos(X_train, X_test):
         
     return X_train_norm, X_test_norm
 
+
 def traer_variables_categoricas(df):
     df = df[['barrio', 'categoria_de_trabajo', 'educacion_alcanzada', 'estado_marital','genero','religion','rol_familiar_registrado','trabajo']]
     return df
+
 
 def traer_variables_discretas(df):
     df = df[['anios_estudiados', 'edad', 'horas_trabajo_registradas']]
@@ -89,7 +99,7 @@ def expandir_dataset(X):
     X2['clustering_2'] = KMeans(n_clusters = 2).fit_predict(X2)
     X2['clustering_4'] = KMeans(n_clusters = 4).fit_predict(X2)
     X2['clustering_6'] = KMeans(n_clusters = 6).fit_predict(X2)
-    
+    X2['clustering_10'] = KMeans(n_clusters = 10).fit_predict(X2)
     
     return X2
 

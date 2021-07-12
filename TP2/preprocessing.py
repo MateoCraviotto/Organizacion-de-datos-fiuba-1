@@ -91,6 +91,9 @@ def traer_variables_discretas(df):
     df = df[['anios_estudiados', 'edad', 'horas_trabajo_registradas']]
     return df
 
+def traer_variables_numericas(df):
+    df = df[['anios_estudiados', 'edad', 'horas_trabajo_registradas','ganancia_perdida_declarada_bolsa_argentina']]
+    return df
 
 def expandir_dataset(X):
     X = X.copy()

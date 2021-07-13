@@ -35,7 +35,7 @@ def plot_roc(_fpr, _tpr, x):
 def graficar_auc_roc(y_test, y_pred):
     fpr, tpr, thresholds = roc_curve(y_test, y_pred)
     plot_roc(fpr, tpr, thresholds)
-    display(roc_auc_score(y_test, y_pred))
+    print(f"El valor de la metrica AUC-ROC para este modelo es: {roc_auc_score(y_test, y_pred)}")
 
     
 def graficar_matriz_confusion(y_true, y_pred):

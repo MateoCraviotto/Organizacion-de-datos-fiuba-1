@@ -119,3 +119,17 @@ def preparar_holdout(holdout):
     holdout = preparar_dataset(holdout)
     
     return id, holdout
+
+def normalizar_holdout(holdout):
+    
+    columnas_numericas = ['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']
+    holdout_normalizado = holdout.copy()
+    
+    for col in columnas_numericas:
+        mean = holdout_normalizado[col].mean()
+        std = holdout_normalizado[col].std()
+        
+        holdout_normalizado[col] = (holdout_normalizado[col] - mean) / std
+        
+    return holdout_normalizado
+    

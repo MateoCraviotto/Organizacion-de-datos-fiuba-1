@@ -5,7 +5,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import Normalizer
 from sklearn.cluster import KMeans
-
+from sklearn.preprocessing import StandardScaler
 
 def definir_barrio(barrio):
     if barrio == "Palermo":
@@ -66,19 +66,22 @@ def dividir_dataset(df):
     
     return X, y
 
-
 def normalizar_datos(X_train, X_test):
     columnas_numericas = ['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']
-    X_train_norm = X_train.copy()
-    X_test_norm = X_test.copy()
+    X_train_columnas_a_normalizar = X_train[['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']]
+    X_test_columnas_a_normalizar = X_test[['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']]
+    X_train_columnas_sin_normalizar = X_train.drop(columnas_numericas, axis=1)
+    X_test_columnas_sin_normalizar = X_test.drop(columnas_numericas, axis=1)
     
-    for col in columnas_numericas:
-        mean = X_train_norm[col].mean()
-        std = X_train_norm[col].std()
-        
-        X_train_norm[col] = (X_train_norm[col] - mean) / std
-        X_test_norm[col] = (X_test_norm[col] - mean) / std
-        
+    scaler = StandardScaler()
+    scaler.fit(X_train_columnas_a_normalizar)
+    
+    X_train_valores_normalizados = pd.DataFrame(scaler.transform(X_train_columnas_a_normalizar),columns=columnas_numericas)
+    X_test_valores_normalizados = pd.DataFrame(scaler.transform(X_test_columnas_a_normalizar),columns=columnas_numericas)
+          
+    X_train_norm = X_train_columnas_sin_normalizar.join(X_train_valores_normalizados)
+    X_test_norm = X_test_columnas_sin_normalizar.join(X_test_valores_normalizados)
+    
     return X_train_norm, X_test_norm
 
 
@@ -120,16 +123,4 @@ def preparar_holdout(holdout):
     
     return id, holdout
 
-def normalizar_holdout(holdout):
-    
-    columnas_numericas = ['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']
-    holdout_normalizado = holdout.copy()
-    
-    for col in columnas_numericas:
-        mean = holdout_normalizado[col].mean()
-        std = holdout_normalizado[col].std()
-        
-        holdout_normalizado[col] = (holdout_normalizado[col] - mean) / std
-        
-    return holdout_normalizado
     

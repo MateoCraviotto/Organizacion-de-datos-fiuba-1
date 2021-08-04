@@ -30,23 +30,14 @@ def definir_nivel_educativo(nivel):
         return "Primario"
     else:
         return "Jardin"
-
-    
-def feature_engineering(df):
-    df['trabajo'] = np.where(df['categoria_de_trabajo'] == 'sin_trabajo', 'desempleado', df['trabajo'])
-    df.reset_index(drop=True, inplace=True)
-
-    df = df.replace(np.nan, {'categoria_de_trabajo': 'no_responde', 'trabajo': 'no_responde'})
-    df.reset_index(drop=True, inplace=True)
-
-    df = df.replace(np.nan, {'barrio': 'No responde'})
-    df.reset_index(drop=True, inplace=True)
-
-    return df
-  
     
 def preparar_dataset(df):
-    feature_engineering(df)    
+    
+    df.loc[df['categoria_de_trabajo'] == 'sin_trabajo', 'trabajo'] = 'desempleado'
+    df.loc[pd.isna(df['trabajo']), 'trabajo'] = 'no_responde'   
+    df.loc[pd.isna(df['categoria_de_trabajo']), 'categoria_de_trabajo'] = 'no_responde'
+    df.loc[pd.isna(df['barrio']), 'barrio'] = 'No responde'    
+    
     df['barrio'] = df['barrio'].apply(definir_barrio)
     df['educacion_alcanzada'] = df['educacion_alcanzada'].apply(definir_nivel_educativo)
     df['estado_marital'] = df['estado_marital'].apply(definir_estado_marital)  
@@ -122,5 +113,6 @@ def preparar_holdout(holdout):
     holdout = preparar_dataset(holdout)
     
     return id, holdout
+
 
     

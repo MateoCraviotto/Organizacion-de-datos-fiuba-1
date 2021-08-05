@@ -45,7 +45,8 @@ def preparar_dataset(df):
 
 
 def aplicar_one_hot_encoding(df):
-    df_preparado = pd.get_dummies(df, dummy_na=True, drop_first=True)    
+    columnas_one_hot = ['barrio', 'categoria_de_trabajo', 'educacion_alcanzada', 'estado_marital', 'genero', 'religion', 'rol_familiar_registrado', 'trabajo']
+    df_preparado = pd.get_dummies(df, dummy_na=True, drop_first=True, columns=columnas_one_hot)    
     return df_preparado
 
 
@@ -61,15 +62,21 @@ def normalizar_datos(X_train, X_test):
     columnas_numericas = ['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']
     X_train_columnas_a_normalizar = X_train[['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']]
     X_test_columnas_a_normalizar = X_test[['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']]
+    
     X_train_columnas_sin_normalizar = X_train.drop(columnas_numericas, axis=1)
+    X_train_columnas_sin_normalizar = X_train_columnas_sin_normalizar.reset_index()
+    
     X_test_columnas_sin_normalizar = X_test.drop(columnas_numericas, axis=1)
+    X_test_columnas_sin_normalizar = X_test_columnas_sin_normalizar.reset_index()
     
     scaler = StandardScaler()
     scaler.fit(X_train_columnas_a_normalizar)
     
     X_train_valores_normalizados = pd.DataFrame(scaler.transform(X_train_columnas_a_normalizar),columns=columnas_numericas)
     X_test_valores_normalizados = pd.DataFrame(scaler.transform(X_test_columnas_a_normalizar),columns=columnas_numericas)
-          
+              
+    
+
     X_train_norm = X_train_columnas_sin_normalizar.join(X_train_valores_normalizados)
     X_test_norm = X_test_columnas_sin_normalizar.join(X_test_valores_normalizados)
     
@@ -90,8 +97,7 @@ def traer_variables_numericas(df):
     return df
 
 def expandir_dataset(X):
-    X = X.copy()
-    X2 = aplicar_one_hot_encoding(X)
+    X2 = X.copy()
     
     X2['clustering_2'] = KMeans(n_clusters = 2).fit_predict(X2)
     X2['clustering_4'] = KMeans(n_clusters = 4).fit_predict(X2)

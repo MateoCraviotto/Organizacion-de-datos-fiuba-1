@@ -10,7 +10,7 @@ def traer_df():
     return pd.read_csv("https://docs.google.com/spreadsheets/d/1-DWTP8uwVS-dZY402-dm0F9ICw_6PNqDGLmH0u8Eqa0/export?format=csv")
 
 
-def traer_holdout():     
+def traer_df_predicciones():     
     return pd.read_csv("https://docs.google.com/spreadsheets/d/1ObsojtXfzvwicsFieGINPx500oGbUoaVTERTc69pzxE/export?format=csv")
 
 

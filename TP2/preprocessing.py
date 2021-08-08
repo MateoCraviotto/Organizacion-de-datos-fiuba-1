@@ -107,18 +107,18 @@ def expandir_dataset(X):
     return X2
 
         
-def preparar_holdout(holdout):
+def preparar_df_predicciones(df_predicciones):
     
-    id = holdout['id'].copy()
+    id = df_predicciones['id'].copy()
     
-    holdout.drop(columns=['id'],inplace=True)
-    holdout.reset_index()
-    holdout.drop(columns=['representatividad_poblacional'],inplace=True)
-    holdout.reset_index()
+    df_predicciones.drop(columns=['id'],inplace=True)
+    df_predicciones.reset_index()
+    df_predicciones.drop(columns=['representatividad_poblacional'],inplace=True)
+    df_predicciones.reset_index()
     
-    holdout = preparar_dataset(holdout)
+    df_predicciones = preparar_dataset(df_predicciones)
     
-    return id, holdout
+    return id, df_predicciones
 
 
     

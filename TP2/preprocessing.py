@@ -59,29 +59,16 @@ def dividir_dataset(df):
     return X, y
 
 def normalizar_datos(X_train, X_test):
-    columnas_numericas = ['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']
-    X_train_columnas_a_normalizar = X_train[['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']]
-    X_test_columnas_a_normalizar = X_test[['anios_estudiados', 'edad', 'ganancia_perdida_declarada_bolsa_argentina', 'horas_trabajo_registradas']]
-    
-    X_train_columnas_sin_normalizar = X_train.drop(columnas_numericas, axis=1)
-    X_train_columnas_sin_normalizar = X_train_columnas_sin_normalizar.reset_index()
-    
-    X_test_columnas_sin_normalizar = X_test.drop(columnas_numericas, axis=1)
-    X_test_columnas_sin_normalizar = X_test_columnas_sin_normalizar.reset_index()
-    
+    X_train_normalizado = X_train.copy()
+    X_test_normalizado = X_test.copy()
+
     scaler = StandardScaler()
-    scaler.fit(X_train_columnas_a_normalizar)
+    scaler.fit(X_train_normalizado)
     
-    X_train_valores_normalizados = pd.DataFrame(scaler.transform(X_train_columnas_a_normalizar),columns=columnas_numericas)
-    X_test_valores_normalizados = pd.DataFrame(scaler.transform(X_test_columnas_a_normalizar),columns=columnas_numericas)
-              
-    
+    X_train_normalizado = scaler.transform(X_train_normalizado)
+    X_test_normalizado = scaler.transform(X_test_normalizado)
 
-    X_train_norm = X_train_columnas_sin_normalizar.join(X_train_valores_normalizados)
-    X_test_norm = X_test_columnas_sin_normalizar.join(X_test_valores_normalizados)
-    
-    return X_train_norm, X_test_norm
-
+    return X_train_normalizado, X_test_normalizado
 
 def traer_variables_categoricas(df):
     df = df[['barrio', 'categoria_de_trabajo', 'educacion_alcanzada', 'estado_marital','genero','religion','rol_familiar_registrado','trabajo']]
